@@ -1,77 +1,77 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 int main() {
-    int n;
-    int k = 0;
+    int versh;
+    int rebro = 0;
     int f = 0;
-    int t = 1;
-    int l = 0;
-    bool flag = false;
-    bool prov = false;
-    scanf_s("%d", &n);
-    int* arr = (int*)malloc(n * n * sizeof(int));
+    int seychas = 1;
+    int pustaya = 0;
+    bool proydennaya = false;
+    bool simple = true ;
+    scanf_s("%d", &versh);
+    int* arr = (int*)malloc(versh * versh * sizeof(int));
 
-    for (int i = 0; i < n; i++) {
-        printf("%d:", i);
+    for (int str = 0; str < versh; str++) {
+        printf("%d:", str);
 
-        for (int j = 0; j < n; j++) {
-            scanf_s("%d", (arr + i * n + j));
+        for (int stolb = 0; stolb < versh; stolb++) {
+            scanf_s("%d", (arr + str * versh + stolb));
         }
     }
     printf("\n");
 
-    for (int i = 0; i < n; i++) {
+    for (int str = 0; str < versh; str++) {
 
-        for (int j = 0; j < n; j++) {
+        for (int stolb = 0; stolb < versh; stolb++) {
 
-            if ((i == j) && (arr[i * n + j] != 0)) {    //диагональ
-                prov = true;
+            if ((str == stolb) && (arr[str * versh + stolb] != 0)) {    //диагональ
+                simple = false ;
             }
 
-            if (arr[i * n + j] != arr[j * n + i]) {     //симметричность отн. диагонали
-                prov = true;
+            if (arr[str * versh + stolb] != arr[stolb * versh + str]) {     //симметричность отн. диагонали
+                simple = false ;
             }
 
-            if ((arr[i * n + j] != 0) && (arr[i * n + j] != 1)) {      //ребра(0 или 1) у каждой вершины
-                prov = true;
+            if ((arr[str * versh + stolb] != 0) && (arr[str * versh + stolb] != 1)) {      //ребра(0 или 1) у каждой вершины
+                simple = false ;
             }
 
-            if (arr[i * n + j] == 1) {      //проверка на два ребра у вершины
-                k++;
+            if (arr[str * versh + stolb] == 1) {      //проверка на два ребра у вершины
+                rebro++;
             }
 
-            if (k > 2) {
-                prov = true;
+            if (rebro > 2) {
+                simple = false ;
             }
         }
-        k = 0;
+        rebro = 0;
     }
 
-    for (int i = 0; i < n; i++) {
+    for (int str = 0; str < versh; str++) {
 
-        for (int j = 0; j < n; j++) {
+        for (int stolb = 0; stolb < versh; stolb++) {
 
-            if ((arr[k * n + j] == 1) && (j != t) && (flag == false)) {     //проверка обходом
-                t = k;
-                k = j;
-                flag = true;
+            if ((arr[rebro * versh + stolb] == 1) && (stolb != seychas) && (proydennaya == false)) {     //проверка обходом
+                seychas = rebro; //позволяет переходить на следующую непройденную вершину помечая предыдущую как пройденную
+                rebro = stolb;
+                proydennaya = true;
             }
         }
-        flag = false;
+        proydennaya = false;
 
-        if ((k == 0) && (i != n - 1)) {
-            prov = true;
+        if ((rebro == 0) && (str != versh - 1)) {
+            simple = false;
         }
 
-        if ((i == n - 1) && (k != 0)) {
-            prov = true;
+        if ((str == versh - 1) && (rebro != 0)) {
+            simple = false;
         }
     }
-    if (prov == false) {
+    if (simple == true) {
         printf("simple cycle");
     }
     else
@@ -87,28 +87,28 @@ int main() {
     }
     fprintf(file, "graph G{\n");
 
-    for (int i = 0; i < n; i++) {
+    for (int str = 0; str < versh; str++) {
 
-        for (int j = 0; j <= i; j++) {
+        for (int stolb = 0; stolb <= str; stolb++) {
 
-            if (arr[i * n + j] != 0) {
+            if (arr[str * versh + stolb] != 0) {
 
-                for (int g = 0; g < arr[i * n + j]; g++) {
-                    fprintf(file, "%d -- %d;\n", (i + 1), (j + 1));
+                for (int graph_line = 0; graph_line < arr[str * versh + stolb]; graph_line++) {
+                    fprintf(file, "%d -- %d;\n", str, stolb);
                 }
             }
         }
     }
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if ((arr[i * n + j]) == 0) {
-                l++;
+    for (int str = 0; str < versh; str++) {
+        for (int stolb = 0; stolb < versh; stolb++) {
+            if ((arr[str * versh + stolb]) == 0) {
+                pustaya++;
             }
         }
-        if (l == n) {
-            fprintf(file, "%d;\n", (i + 1));
+        if (pustaya == versh) {
+            fprintf(file, "%d;\n", str);
         }
-        l = 0;
+        pustaya = 0;
     }
 
     fprintf(file, "}");
